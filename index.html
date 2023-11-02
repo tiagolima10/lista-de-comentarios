@@ -21,13 +21,13 @@
                 <button type="submit" class="btn btn-primary" v-on:click="adcComentario">Comentar</button>
             </div>
             <div class="list-group" style="margin-top: 20px;">
-                <div class="list-group-item" v-for="(comentario, index) in comentarios">
+                <div class="list-group-item" v-for="(comentario, index) in todosComentarios">
                     <span class="comment_author">
                         Autor: <strong>{{ comentario.nome }}</strong>
                     </span>
                     <p>{{ comentario.mensagem }}</p>
                     <div>
-                        <a href="#" title="Excluir" @click="excluirComentario(index)">Excluir</a>
+                        <a href="#" title="Excluir" v-on:click.prevent="excluirComentario(index)">Excluir</a>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
             },
             methods: {
                 adcComentario() {
-                    if (this.nome.trim() === '' || this.mensagem.trim() === '') {
+                    if (this.mensagem.trim() === '') {
                         return;
                     }
                     this.comentarios.push({
@@ -61,6 +61,23 @@
                 excluirComentario(index) {
                     this.comentarios.splice(index, 1);
                 }
+            },
+            computed: {
+                //TRATA-SE MAIS DA PARTE VISUAL, MÁSCARAS, INTERFACE, CUSTOMIZAÇÃO
+                todosComentarios() {
+                    return this.comentarios.map(comentario => ({
+                        ...comentario,
+                        nome: comentario.nome.trim() === '' ? 'Anônimo' : comentario.nome
+                    }))
+                }
+            },
+            watch: {
+                comentarios: {
+                    handler(novoComentario, antigoComentario) {
+                        console.log('Novo valor de comentarios:', novoComentario)
+                    },
+                    deep: true
+                } 
             }
         })
 
