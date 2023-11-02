@@ -9,7 +9,7 @@
 <body>
     <div id="app">
         <div class="container">
-            <h1>Comentários</h1>
+            <h1 style="margin-top: 10px;">Comentários</h1>
             <hr>
             <div class="form-todo form-group">
                 <p>
@@ -21,13 +21,13 @@
                 <button type="submit" class="btn btn-primary" v-on:click="adcComentario">Comentar</button>
             </div>
             <div class="list-group" style="margin-top: 20px;">
-                <div class="list-group-item" v-for="comentario in comentarios">
+                <div class="list-group-item" v-for="(comentario, index) in comentarios">
                     <span class="comment_author">
                         Autor: <strong>{{ comentario.nome }}</strong>
                     </span>
                     <p>{{ comentario.mensagem }}</p>
                     <div>
-                        <a href="#" title="Excluir">Excluir</a>
+                        <a href="#" title="Excluir" @click="excluirComentario(index)">Excluir</a>
                     </div>
                 </div>
             </div>
@@ -47,6 +47,9 @@
             },
             methods: {
                 adcComentario() {
+                    if (this.nome.trim() === '' || this.mensagem.trim() === '') {
+                        return;
+                    }
                     this.comentarios.push({
                         nome: this.nome,
                         mensagem: this.mensagem
@@ -54,6 +57,9 @@
 
                     this.nome = '',
                     this.mensagem = ''
+                },
+                excluirComentario(index) {
+                    this.comentarios.splice(index, 1);
                 }
             }
         })
